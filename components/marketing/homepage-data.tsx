@@ -1,4 +1,4 @@
-import type React from "react";
+import * as React from "react";
 import { Briefcase, Building2, Search, ShieldCheck, Star, Upload, UserCheck, Users } from "lucide-react";
 
 export type Category = {

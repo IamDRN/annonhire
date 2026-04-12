@@ -1,4 +1,4 @@
-import type React from "react";
+import * as React from "react";
 import Link from "next/link";
 import { Bell, BriefcaseBusiness, Building2, Home, Search, Settings, Shield } from "lucide-react";
 import { cn } from "@/lib/utils";

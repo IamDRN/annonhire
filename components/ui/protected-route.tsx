@@ -1,4 +1,4 @@
-import type React from "react";
+import * as React from "react";
 import { UserRole } from "@prisma/client";
 import { requireRole } from "@/lib/auth/session";
 

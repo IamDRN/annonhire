@@ -1,4 +1,4 @@
-import type React from "react";
+import * as React from "react";
 import { Briefcase, Search, ShieldCheck } from "lucide-react";
 import { MarketingLinkButton, MarketingSection, SectionHeading } from "@/components/marketing/home-shared";
 
