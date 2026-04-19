@@ -33,7 +33,7 @@ export function SectionHeading({
 
   return (
     <div className={alignment}>
-      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">{eyebrow}</p>
+      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700 dark:text-sky-300">{eyebrow}</p>
       <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-950 md:text-4xl dark:text-white">{title}</h2>
       <p className="mt-4 text-base leading-7 text-slate-600 md:text-lg dark:text-slate-300">{description}</p>
     </div>
@@ -94,7 +94,7 @@ export function PrivacyRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-5 py-4 transition-colors hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950 dark:hover:border-slate-700">
       <span className="text-sm text-slate-600 dark:text-slate-300">{label}</span>
-      <span className="rounded-full bg-slate-900 px-3 py-1 text-xs font-medium text-white dark:bg-white dark:text-slate-900">
+      <span className="rounded-full bg-primary px-3 py-1 text-xs font-medium text-white">
         {value}
       </span>
     </div>
@@ -104,8 +104,8 @@ export function PrivacyRow({ label, value }: { label: string; value: string }) {
 export function BulletPoint({ text }: { text: string }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-slate-900 text-white dark:bg-white dark:text-slate-900">
-        <div className="h-1.5 w-1.5 rounded-full bg-white dark:bg-slate-900" />
+      <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white">
+        <div className="h-1.5 w-1.5 rounded-full bg-white" />
       </div>
       <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">{text}</p>
     </div>
@@ -127,8 +127,8 @@ export function MarketingLinkButton({
       className={cn(
         "inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition-all",
         variant === "primary"
-          ? "bg-slate-900 text-white shadow-sm hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
-          : "border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-900"
+          ? "bg-primary text-white shadow-soft hover:-translate-y-0.5 hover:bg-sky-500"
+          : "border border-slate-300 bg-white text-slate-700 hover:border-sky-200 hover:bg-sky-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-sky-900 dark:hover:bg-slate-900"
       )}
     >
       {children}

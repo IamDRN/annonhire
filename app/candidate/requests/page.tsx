@@ -1,4 +1,3 @@
-import { UserRole } from "@prisma/client";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { RequestStatusBadge } from "@/components/employer/request-status-badge";
 import { ProtectedRoute } from "@/components/ui/protected-route";
@@ -17,7 +16,7 @@ export default async function CandidateRequestsPage() {
   const profile = await getCandidateDashboard(session.user.id);
 
   return (
-    <ProtectedRoute allow={[UserRole.CANDIDATE]}>
+    <ProtectedRoute allow={["CANDIDATE"]}>
       <main className="container-width grid gap-6 py-10 lg:grid-cols-[280px_1fr]">
         <DashboardSidebar role="candidate" />
         <div className="space-y-6">

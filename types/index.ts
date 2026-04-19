@@ -1,4 +1,4 @@
-import { ContactRequestStatus, EmployerVerificationStatus, NoticePeriod, PrivacyCompanyMode, UserRole, WorkMode } from "@prisma/client";
+import { ContactRequestStatus, EmployerVerificationStatus, NoticePeriod, PrivacyCompanyMode, WorkMode } from "@prisma/client";
 
 export type SearchFilters = {
   keyword?: string;
@@ -40,5 +40,5 @@ export type ContactDisclosureMode = "messaging_only" | "reveal_contact";
 
 export type EmployerVerificationState = EmployerVerificationStatus;
 export type RequestState = ContactRequestStatus;
-export type AppRole = UserRole;
+export type AppRole = "CANDIDATE" | "EMPLOYER" | "ADMIN";
 export type CompanyPrivacyMode = PrivacyCompanyMode;

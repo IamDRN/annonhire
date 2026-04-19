@@ -9,15 +9,17 @@
 body {
   @apply bg-background text-foreground antialiased;
   background-image:
-    radial-gradient(circle at top left, rgba(219, 234, 254, 0.9), transparent 30%),
-    linear-gradient(180deg, #f8fbff 0%, #f5f7fb 35%, #eef3f8 100%);
+    radial-gradient(circle at top left, rgba(102, 179, 223, 0.24), transparent 28%),
+    radial-gradient(circle at top right, rgba(148, 163, 184, 0.16), transparent 26%),
+    linear-gradient(180deg, #fcfeff 0%, #f4fafe 38%, #edf5fb 100%);
 }
 
 .dark body {
   @apply bg-slate-950 text-slate-100;
   background-image:
-    radial-gradient(circle at top left, rgba(30, 41, 59, 0.6), transparent 28%),
-    linear-gradient(180deg, #020617 0%, #0f172a 45%, #020617 100%);
+    radial-gradient(circle at top left, rgba(102, 179, 223, 0.18), transparent 24%),
+    radial-gradient(circle at top right, rgba(71, 85, 105, 0.2), transparent 22%),
+    linear-gradient(180deg, #07111b 0%, #0f1d2c 45%, #07111b 100%);
 }
 
 a {

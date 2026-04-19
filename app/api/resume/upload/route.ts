@@ -26,15 +26,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid file" }, { status: 400 });
   }
 
-  const uploadDir = process.env.UPLOAD_DIR
-    ? path.resolve(process.cwd(), process.env.UPLOAD_DIR)
-    : path.resolve(process.cwd(), "public/uploads");
-  await mkdir(uploadDir, { recursive: true });
-
   const buffer = Buffer.from(await file.arrayBuffer());
   const safeName = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
-  const targetPath = path.join(uploadDir, safeName);
-  await writeFile(targetPath, buffer);
+  let fileUrl = `/uploads/${safeName}`;
+
+  try {
+    // Keep this path statically scoped so Next/Vercel tracing does not accidentally include the whole project.
+    const uploadDir = path.join(process.cwd(), "public", "uploads");
+    await mkdir(uploadDir, { recursive: true });
+    const targetPath = path.join(uploadDir, safeName);
+    await writeFile(targetPath, buffer);
+  } catch {
+    // Replace this with object storage in production. The mock parser flow should still work
+    // even if the runtime filesystem is ephemeral, such as on Vercel.
+    fileUrl = `mock-storage://${safeName}`;
+  }
 
   const parsed = await parseResumeMock({ fileName: file.name });
   const session = await getServerSession(authOptions);
@@ -49,14 +55,14 @@ export async function POST(request: Request) {
         where: { candidateProfileId: candidate.id },
         update: {
           fileName: file.name,
-          fileUrl: `/uploads/${safeName}`,
+          fileUrl,
           mimeType: file.type,
           parsedAt: new Date()
         },
         create: {
           candidateProfileId: candidate.id,
           fileName: file.name,
-          fileUrl: `/uploads/${safeName}`,
+          fileUrl,
           mimeType: file.type,
           parsedAt: new Date()
         }
@@ -65,7 +71,7 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json({
-    fileUrl: `/uploads/${safeName}`,
+    fileUrl,
     parsed
   });
 }

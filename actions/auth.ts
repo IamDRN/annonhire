@@ -1,7 +1,7 @@
 "use server";
 
 import bcrypt from "bcryptjs";
-import { EmployerVerificationStatus, UserRole } from "@prisma/client";
+import { EmployerVerificationStatus } from "@prisma/client";
 import { prisma } from "@/lib/db/prisma";
 import { candidateSignupSchema, employerSignupSchema } from "@/lib/validations";
 
@@ -18,7 +18,7 @@ export async function registerCandidate(input: FormData) {
     data: {
       email: payload.email,
       passwordHash,
-      role: UserRole.CANDIDATE,
+      role: "CANDIDATE",
       candidateProfile: {
         create: {
           anonymousId: `ANON-${Math.random().toString(36).slice(2, 7).toUpperCase()}`,
@@ -59,7 +59,7 @@ export async function registerEmployer(input: FormData) {
     data: {
       email: payload.workEmail,
       passwordHash,
-      role: UserRole.EMPLOYER,
+      role: "EMPLOYER",
       employerProfile: {
         create: {
           fullName: payload.name,

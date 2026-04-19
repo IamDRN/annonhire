@@ -3,7 +3,6 @@ import {
   NoticePeriod,
   PrismaClient,
   PrivacyCompanyMode,
-  UserRole,
   WorkMode
 } from "@prisma/client";
 import bcrypt from "bcryptjs";
@@ -131,14 +130,14 @@ async function main() {
   });
 
   await prisma.user.create({
-    data: { email: "admin@anonhire.dev", passwordHash, role: UserRole.ADMIN, emailVerifiedAt: new Date() }
+    data: { email: "admin@anonhire.dev", passwordHash, role: "ADMIN", emailVerifiedAt: new Date() }
   });
 
   await prisma.user.create({
     data: {
       email: "recruiter@northridge.example",
       passwordHash,
-      role: UserRole.EMPLOYER,
+      role: "EMPLOYER",
       emailVerifiedAt: new Date(),
       employerProfile: {
         create: {
@@ -157,7 +156,7 @@ async function main() {
     data: {
       email: "hiring@summitcloud.example",
       passwordHash,
-      role: UserRole.EMPLOYER,
+      role: "EMPLOYER",
       emailVerifiedAt: new Date(),
       employerProfile: {
         create: {
@@ -177,7 +176,7 @@ async function main() {
       data: {
         email: fixture.email,
         passwordHash,
-        role: UserRole.CANDIDATE,
+        role: "CANDIDATE",
         emailVerifiedAt: new Date(),
         candidateProfile: {
           create: {

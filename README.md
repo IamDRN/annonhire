@@ -1,18 +1,19 @@
 # AnonHire
 
-AnonHire is a privacy-first job portal built with Next.js App Router, TypeScript, Tailwind CSS, Prisma, PostgreSQL, NextAuth credentials auth, Zod validation, React Hook Form-ready patterns, and a search abstraction that can evolve from Prisma queries to OpenSearch later.
+AnonHire is a privacy-first talent marketplace built with Next.js App Router, TypeScript, Tailwind CSS, Prisma, PostgreSQL, and Auth.js / NextAuth. Candidates stay anonymous until they approve contact, while employers search structured profiles and send compliant HIRE ME requests.
 
-## What’s Included
+## Current MVP Scope
 
-- Anonymous candidate onboarding with resume upload and mocked parsing flow
-- Employer registration with company onboarding and verification states
-- Candidate dashboard with resume review, privacy controls, request inbox, and notifications
-- Employer dashboard with candidate search, request tracking, and company overview
-- Admin dashboard with verification queue, moderation placeholders, audit logs, and settings placeholders
-- Prisma schema with candidate, employer, request, privacy, notification, and audit models
-- Seed script with 6 sample candidates, 2 verified employers, and 1 admin
+- Candidate email/password authentication
+- Candidate Google login
+- Employer email/password authentication
+- Anonymous candidate onboarding with resume upload and mock parsing
+- Candidate dashboard with privacy controls, onboarding guidance, requests, and notifications
+- Employer dashboard with search, requests, and verification-aware access
+- Admin dashboard placeholders for moderation and verification
+- Candidate search with privacy-safe cards and request CTA flow
 
-## Folder Structure
+## Project Structure
 
 ```text
 app/
@@ -20,10 +21,40 @@ components/
 lib/
 actions/
 services/
-hooks/
 types/
-prisma/
 public/
+```
+
+Prisma schema and migrations live under:
+
+```text
+lib/prisma/
+```
+
+## Environment Variables
+
+Copy `.env.example` to `.env` and configure:
+
+```env
+DATABASE_URL=
+AUTH_SECRET=
+AUTH_GOOGLE_ID=
+AUTH_GOOGLE_SECRET=
+NEXTAUTH_URL=
+UPLOAD_DIR=
+CONTACT_REVEAL_MODE=
+```
+
+Google callback URL:
+
+```text
+/api/auth/callback/google
+```
+
+Local example:
+
+```text
+http://localhost:3000/api/auth/callback/google
 ```
 
 ## Setup
@@ -34,67 +65,57 @@ public/
 npm install
 ```
 
-2. Copy environment variables:
-
-```bash
-cp .env.example .env
-```
-
-3. Update `.env` with your PostgreSQL connection string and secure auth secret.
-
-4. Generate Prisma client:
+2. Generate Prisma client:
 
 ```bash
 npm run prisma:generate
 ```
 
-5. Run your first migration:
+3. Run migrations:
 
 ```bash
 npm run prisma:migrate
 ```
 
-6. Seed the database:
+4. Seed sample data:
 
 ```bash
 npm run db:seed
 ```
 
-## Run Locally
+5. Start development:
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+## Build
 
-## Sample Seed Credentials
+The production build runs Prisma generate automatically before `next build`:
+
+```bash
+npm run build
+```
+
+## Sample Credentials
 
 - Admin: `admin@anonhire.dev` / `Password123!`
 - Employer: `recruiter@northridge.example` / `Password123!`
 - Employer: `hiring@summitcloud.example` / `Password123!`
 - Candidate: `candidate1@anonhire.dev` / `Password123!`
 
-## Production Replacement Points
+## Production Notes
 
-- Replace `services/resume-parser.ts` with your real OCR / resume parsing pipeline.
-- Replace local resume storage in [`app/api/resume/upload/route.ts`](/E:/Personal/Projects/HIREME/app/api/resume/upload/route.ts) with object storage such as S3 or UploadThing.
-- Replace forgot-password and email verification placeholders with transactional email flows.
-- Add a proper rate limiter around auth, upload, and request endpoints.
-- Extend `lib/search/search-engine.ts` with an OpenSearch-backed provider when search volume grows.
+- Google login is enabled only when both `AUTH_GOOGLE_ID` and `AUTH_GOOGLE_SECRET` are set.
+- In development, missing Google OAuth variables will not crash the app; candidate auth falls back to credentials.
+- Resume file storage currently degrades gracefully when filesystem persistence is unavailable. Replace it with object storage such as UploadThing or S3 for production durability.
+- Forgot password and email verification are still placeholders and should be replaced with transactional email flows.
 
-## Future Enhancements
+## Recommended Phase 2
 
+- LinkedIn authentication
+- Persistent object storage for resumes
 - Real-time secure employer-candidate messaging
-- Subscription billing and recruiter seat management
-- Saved search alerts and digest notifications
-- AI-assisted candidate ranking and resume enrichment
-- Document verification workflows for employer onboarding
-- Advanced moderation, abuse reporting, and compliance tooling
-
-## Notes
-
-- `CONTACT_REVEAL_MODE` controls whether approval opens messaging only or can reveal contact details.
-- Candidate PII stays hidden from search results and anonymous profile pages by default.
-- The MVP uses server actions and route handlers with clear extension points for production hardening.
-"# IamDRN" 
+- Saved search alerts
+- Billing and team seats
+- Richer moderation and analytics

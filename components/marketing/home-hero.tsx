@@ -1,23 +1,25 @@
 import { Lock } from "lucide-react";
 import { InfoItem, MarketingLinkButton, MarketingSection, SkillTag, TrustPill } from "@/components/marketing/home-shared";
+import { BrandLogo } from "@/components/ui/brand-logo";
 
 export function HomeHero() {
   return (
     <MarketingSection className="overflow-hidden bg-white dark:bg-slate-950">
       <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
         <div>
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-slate-300 bg-slate-50 px-4 py-2 text-xs font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+          <BrandLogo className="mb-6" imageClassName="h-12 sm:h-14" priority />
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-4 py-2 text-xs font-medium text-sky-800 dark:border-sky-900 dark:bg-sky-950/40 dark:text-sky-200">
             <Lock className="h-4 w-4" />
-            Anonymous profiles. Candidate-controlled contact sharing.
+            Anonymous profiles. Warm, candidate-controlled hiring.
           </div>
 
           <h1 className="max-w-2xl text-4xl font-bold leading-tight tracking-tight text-slate-950 md:text-5xl dark:text-white">
-            Upload your resume anonymously. Let employers find your skills.
+            Upload your resume privately and get discovered with confidence.
           </h1>
 
           <p className="mt-5 max-w-xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-            Stay private until you choose to connect. Employers search candidates by skills, experience, and fit
-            through a secure HIRE ME flow.
+            AnonHire helps you explore new opportunities without exposing your identity too early. Employers discover
+            your skills, experience, and fit first, then request contact through a secure consent-based flow.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -35,7 +37,8 @@ export function HomeHero() {
         </div>
 
         <div className="relative">
-          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <div className="absolute inset-x-8 top-8 h-40 rounded-full bg-sky-200/40 blur-3xl dark:bg-sky-900/20" />
+          <div className="relative rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
               <div className="mb-5 flex items-start justify-between gap-4">
                 <div>

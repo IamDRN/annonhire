@@ -1,4 +1,3 @@
-import { UserRole } from "@prisma/client";
 import { CandidateCard } from "@/components/employer/candidate-card";
 import { SearchFilters } from "@/components/employer/search-filters";
 import { ProtectedRoute } from "@/components/ui/protected-route";
@@ -35,7 +34,7 @@ export default async function EmployerSearchPage({
   ]);
 
   return (
-    <ProtectedRoute allow={[UserRole.EMPLOYER]}>
+    <ProtectedRoute allow={["EMPLOYER"]}>
       <main className="container-width py-10">
         <div className="mb-8">
           <h1 className="text-3xl font-semibold tracking-tight">Search anonymous candidates</h1>

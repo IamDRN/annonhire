@@ -1,10 +1,10 @@
-import { notFound } from "next/navigation";
+﻿import { notFound } from "next/navigation";
 import { Building2, GraduationCap, MapPin, Timer } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { getDemoAnonymousProfile, getMaskedExperienceLabel } from "@/services/dashboard-service";
+import { Card } from "@/components/ui/card";
 import { formatCurrencyRange } from "@/lib/utils";
+import { getDemoAnonymousProfile, getMaskedExperienceLabel } from "@/services/dashboard-service";
 
 export default async function CandidateAnonymousProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -19,7 +19,9 @@ export default async function CandidateAnonymousProfilePage({ params }: { params
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
         <div className="space-y-6">
           <Card>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{profile.anonymousId}</p>
+            <div className="inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">
+              {profile.anonymousId}
+            </div>
             <h1 className="mt-3 text-4xl font-semibold tracking-tight">{profile.headline ?? "Anonymous Candidate"}</h1>
             <p className="mt-4 text-sm leading-7 text-muted">{profile.summary}</p>
             <div className="mt-6 flex flex-wrap gap-2">
@@ -28,6 +30,7 @@ export default async function CandidateAnonymousProfilePage({ params }: { params
               ))}
             </div>
           </Card>
+
           <Card>
             <h2 className="text-xl font-semibold">Experience</h2>
             <div className="mt-5 space-y-4">
@@ -43,8 +46,9 @@ export default async function CandidateAnonymousProfilePage({ params }: { params
               ))}
             </div>
           </Card>
+
           <Card>
-            <h2 className="text-xl font-semibold">Education & certifications</h2>
+            <h2 className="text-xl font-semibold">Education and certifications</h2>
             <div className="mt-5 space-y-4">
               {profile.education.map((item) => (
                 <div key={item.id} className="rounded-2xl border border-slate-100 p-4">
@@ -53,7 +57,8 @@ export default async function CandidateAnonymousProfilePage({ params }: { params
                     {profile.privacySetting?.revealEducationInstitution ? item.institution : "Confidential Institution"}
                   </p>
                   <p className="mt-1 text-sm text-muted">
-                    {item.degree} {item.fieldOfStudy ? `• ${item.fieldOfStudy}` : ""}
+                    {item.degree}
+                    {item.fieldOfStudy ? ` • ${item.fieldOfStudy}` : ""}
                   </p>
                 </div>
               ))}
@@ -66,8 +71,12 @@ export default async function CandidateAnonymousProfilePage({ params }: { params
             </div>
           </Card>
         </div>
+
         <Card className="h-fit">
-          <h2 className="text-xl font-semibold">At a glance</h2>
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+            Privacy-first profile. Contact data stays hidden until candidate approval.
+          </div>
+          <h2 className="mt-6 text-xl font-semibold">At a glance</h2>
           <div className="mt-5 space-y-4 text-sm text-slate-600">
             <p>
               <Timer className="mr-2 inline h-4 w-4" />

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
+import { BrandLogo } from "@/components/ui/brand-logo";
 
 function FooterColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
   return (
@@ -23,17 +23,9 @@ export function HomeFooter() {
     <footer className="bg-slate-950 text-slate-300 dark:border-t dark:border-slate-800">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 md:grid-cols-4">
         <div>
-          <div className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10">
-              <ShieldCheck className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-lg font-semibold text-white">AnonHire</p>
-              <p className="text-xs text-slate-400">Privacy-first talent discovery</p>
-            </div>
-          </div>
+          <BrandLogo imageClassName="h-10 opacity-95" />
           <p className="mt-4 max-w-xs text-sm leading-6 text-slate-400">
-            A secure talent platform where candidates stay anonymous until they choose to connect.
+            A friendlier, privacy-first hiring platform where candidates stay anonymous until they choose to connect.
           </p>
         </div>
 

@@ -1,4 +1,4 @@
-import { EmployerVerificationStatus, UserRole } from "@prisma/client";
+import { EmployerVerificationStatus } from "@prisma/client";
 import { prisma } from "@/lib/db/prisma";
 import { maskCompanyName } from "@/lib/utils";
 
@@ -169,7 +169,7 @@ export async function getDemoAnonymousProfile(profileIdOrSlug: string) {
 export async function getRoleHome(userId: string) {
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) return "/";
-  if (user.role === UserRole.CANDIDATE) return "/candidate/dashboard";
-  if (user.role === UserRole.EMPLOYER) return "/employer/dashboard";
+  if (user.role === "CANDIDATE") return "/candidate/dashboard";
+  if (user.role === "EMPLOYER") return "/employer/dashboard";
   return "/admin/dashboard";
 }

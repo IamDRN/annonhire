@@ -1,12 +1,12 @@
 import * as React from "react";
-import { UserRole } from "@prisma/client";
+import type { AppUserRole } from "@/lib/auth/auth";
 import { requireRole } from "@/lib/auth/session";
 
 export async function ProtectedRoute({
   allow,
   children
 }: {
-  allow: UserRole[];
+  allow: AppUserRole[];
   children: React.ReactNode;
 }) {
   await requireRole(allow);

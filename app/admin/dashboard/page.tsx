@@ -1,4 +1,3 @@
-import { UserRole } from "@prisma/client";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { StatsCards } from "@/components/dashboard/stats-cards";
 import { ProtectedRoute } from "@/components/ui/protected-route";
@@ -7,11 +6,11 @@ import { requireRole } from "@/lib/auth/session";
 import { getAdminDashboard } from "@/services/dashboard-service";
 
 export default async function AdminDashboardPage() {
-  await requireRole([UserRole.ADMIN]);
+  await requireRole(["ADMIN"]);
   const data = await getAdminDashboard();
 
   return (
-    <ProtectedRoute allow={[UserRole.ADMIN]}>
+    <ProtectedRoute allow={["ADMIN"]}>
       <main className="container-width grid gap-6 py-10 lg:grid-cols-[280px_1fr]">
         <DashboardSidebar role="admin" />
         <div className="space-y-6">

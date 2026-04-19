@@ -1,4 +1,3 @@
-import { UserRole } from "@prisma/client";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { NotificationBell } from "@/components/dashboard/notification-bell";
 import { StatsCards } from "@/components/dashboard/stats-cards";
@@ -6,6 +5,7 @@ import { OnboardingWorkspace } from "@/components/candidate/onboarding-workspace
 import { PrivacySettingsPanel } from "@/components/candidate/privacy-settings-panel";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ProtectedRoute } from "@/components/ui/protected-route";
+import { Card } from "@/components/ui/card";
 import { getCurrentSession } from "@/lib/auth/session";
 import { getCandidateDashboard, getNotificationsForUser } from "@/services/dashboard-service";
 
@@ -56,7 +56,7 @@ export default async function CandidateDashboardPage() {
   };
 
   return (
-    <ProtectedRoute allow={[UserRole.CANDIDATE]}>
+    <ProtectedRoute allow={["CANDIDATE"]}>
       <main className="container-width grid gap-6 py-10 lg:grid-cols-[280px_1fr]">
         <DashboardSidebar role="candidate" />
         <div className="space-y-6">
@@ -72,6 +72,33 @@ export default async function CandidateDashboardPage() {
               { label: "Blocked domains", value: profile?.blockedEmployers.length ?? 0, hint: "Prevent targeted companies from viewing." }
             ]}
           />
+          <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
+            <Card>
+              <h2 className="text-xl font-semibold">Quick actions</h2>
+              <div className="mt-5 grid gap-3 md:grid-cols-2">
+                <a href="#privacy" className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-white">
+                  Review privacy settings
+                </a>
+                <a href="#notifications" className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-white">
+                  Check recent notifications
+                </a>
+                <a href="/candidate/requests" className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-white">
+                  Open employer requests
+                </a>
+                <a href="/candidate/profile/demo" className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-white">
+                  Preview anonymous profile
+                </a>
+              </div>
+            </Card>
+            <Card>
+              <h2 className="text-xl font-semibold">Improve discoverability</h2>
+              <div className="mt-5 space-y-3 text-sm text-slate-600">
+                <div className="rounded-2xl border border-slate-200 p-4">Add skill coverage that matches your target roles.</div>
+                <div className="rounded-2xl border border-slate-200 p-4">Complete work experience and salary range to raise profile quality.</div>
+                <div className="rounded-2xl border border-slate-200 p-4">Review privacy settings before turning search visibility on.</div>
+              </div>
+            </Card>
+          </div>
           {profile ? (
             <OnboardingWorkspace candidateProfileId={profile.id} initialDraft={parsedDraft} />
           ) : (

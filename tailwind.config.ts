@@ -11,29 +11,29 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#f5f7fb",
-        foreground: "#10213a",
+        background: "#f6fbff",
+        foreground: "#4b5563",
         card: "#ffffff",
-        border: "#dce4f0",
-        muted: "#64748b",
+        border: "#d8e6f0",
+        muted: "#6b7280",
         primary: {
-          DEFAULT: "#0f4c81",
-          foreground: "#f8fafc"
+          DEFAULT: "#66b3df",
+          foreground: "#f8fbff"
         },
         secondary: {
-          DEFAULT: "#dbeafe",
-          foreground: "#0f172a"
+          DEFAULT: "#e7f5fc",
+          foreground: "#425466"
         },
         accent: {
-          DEFAULT: "#e2f3ee",
-          foreground: "#155e4b"
+          DEFAULT: "#eff8fd",
+          foreground: "#4b5563"
         },
-        success: "#15803d",
-        warning: "#b45309",
+        success: "#158f64",
+        warning: "#c27b28",
         danger: "#b91c1c"
       },
       boxShadow: {
-        soft: "0 20px 50px rgba(15, 23, 42, 0.08)"
+        soft: "0 20px 50px rgba(102, 179, 223, 0.12)"
       },
       borderRadius: {
         xl: "1.25rem",

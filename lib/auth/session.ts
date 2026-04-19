@@ -1,13 +1,13 @@
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
-import { UserRole } from "@prisma/client";
+import type { AppUserRole } from "@/lib/auth/auth";
 import { authOptions } from "@/lib/auth/auth";
 
 export async function getCurrentSession() {
   return getServerSession(authOptions);
 }
 
-export async function requireRole(roles: UserRole[]) {
+export async function requireRole(roles: AppUserRole[]) {
   const session = await getCurrentSession();
 
   if (!session?.user) {
