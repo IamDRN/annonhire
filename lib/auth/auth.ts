@@ -85,52 +85,56 @@ export const authConfig: NextAuthConfig = {
     signIn: "/candidate/login"
   },
   providers,
-  callbacks: {
+      callbacks: {
     async signIn({ user, account }) {
-  try {
-    if (account?.provider === "google" && user.email) {
-      const email = user.email.toLowerCase();
+      try {
+        if (account?.provider === "google" && user.email) {
+          const email = user.email.toLowerCase();
 
-      const dbUser = await prisma.user.upsert({
-        where: { email },
-        update: {
-          name: user.name ?? undefined,
-          image: user.image ?? undefined
-        },
-        create: {
-          email,
-          name: user.name ?? null,
-          image: user.image ?? null,
-          role: "CANDIDATE"
-        }
-      });
-
-      if (dbUser.role === "CANDIDATE") {
-        const existingProfile = await prisma.candidateProfile.findUnique({
-          where: { userId: dbUser.id }
-        });
-
-        if (!existingProfile) {
-          await prisma.candidateProfile.create({
-            data: {
-              userId: dbUser.id,
-              anonymousId: createAnonymousId(),
-              profileCompleteness: 0,
-              onboardingCompleted: false,
-              onboardingStep: 1
+          const dbUser = await prisma.user.upsert({
+            where: { email },
+            update: {
+              name: user.name ?? undefined,
+              image: user.image ?? undefined
+            },
+            create: {
+              email,
+              name: user.name ?? null,
+              image: user.image ?? null,
+              role: "CANDIDATE"
             }
           });
-        }
-      }
-    }
 
-    return true;
-  } catch (error) {
-    console.error("Google signIn callback failed:", error);
-    return false;
-  }
-}
+          try {
+            if (dbUser.role === "CANDIDATE") {
+              const existingProfile = await prisma.candidateProfile.findUnique({
+                where: { userId: dbUser.id }
+              });
+
+              if (!existingProfile) {
+                await prisma.candidateProfile.create({
+                  data: {
+                    userId: dbUser.id,
+                    anonymousId: createAnonymousId(),
+                    profileCompleteness: 0,
+                    onboardingCompleted: false,
+                    onboardingStep: 1
+                  }
+                });
+              }
+            }
+          } catch (profileError) {
+            console.error("Candidate profile creation failed:", profileError);
+          }
+        }
+
+        return true;
+      } catch (error) {
+        console.error("Google signIn callback failed:", error);
+        return false;
+      }
     },
+
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
@@ -152,15 +156,19 @@ export const authConfig: NextAuthConfig = {
 
       return token;
     },
+
     async session({ session, token }) {
       if (session.user) {
         session.user.id = String(token.id ?? "");
-        session.user.role = normalizeRole(String(token.role ?? "CANDIDATE")) as AppUserRole;
+        session.user.role = normalizeRole(
+          String(token.role ?? "CANDIDATE")
+        ) as AppUserRole;
         session.user.email = session.user.email ?? null;
       }
 
       return session;
     },
+
     async redirect({ baseUrl, url }) {
       if (url.startsWith("/")) return `${baseUrl}${url}`;
       if (url.startsWith(baseUrl)) return url;
@@ -168,5 +176,4 @@ export const authConfig: NextAuthConfig = {
     }
   }
 };
-
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
