@@ -21,13 +21,6 @@ declare module "next-auth" {
   }
 }
 
-declare module "next-auth/jwt" {
-  interface JWT {
-    id?: string;
-    role?: AppUserRole;
-  }
-}
-
 function createAnonymousId() {
   return `AH-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
 }
@@ -135,40 +128,49 @@ export const authConfig: NextAuthConfig = {
       }
     },
 
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.role = normalizeRole(user.role) as AppUserRole;
-      }
+async jwt({ token, user }) {
+  const mutableToken = token as typeof token & {
+    id?: string;
+    role?: AppUserRole;
+  };
 
-      if (token.email) {
-        const dbUser = await prisma.user.findUnique({
-          where: { email: token.email.toLowerCase() }
-        });
+  if (user) {
+    mutableToken.id = user.id;
+    mutableToken.role = normalizeRole(user.role) as AppUserRole;
+  }
 
-        if (dbUser) {
-          token.id = dbUser.id;
-          token.role = normalizeRole(dbUser.role) as AppUserRole;
-          token.name = dbUser.name ?? token.name;
-          token.picture = dbUser.image ?? token.picture;
-        }
-      }
+  if (token.email) {
+    const dbUser = await prisma.user.findUnique({
+      where: { email: token.email.toLowerCase() }
+    });
 
-      return token;
-    },
+    if (dbUser) {
+      mutableToken.id = dbUser.id;
+      mutableToken.role = normalizeRole(dbUser.role) as AppUserRole;
+      mutableToken.name = dbUser.name ?? token.name;
+      mutableToken.picture = dbUser.image ?? token.picture;
+    }
+  }
 
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = String(token.id ?? "");
-        session.user.role = normalizeRole(
-          String(token.role ?? "CANDIDATE")
-        ) as AppUserRole;
-        session.user.email = session.user.email ?? null;
-      }
+  return mutableToken;
+},
 
-      return session;
-    },
+   async session({ session, token }) {
+  const typedToken = token as typeof token & {
+    id?: string;
+    role?: AppUserRole;
+  };
 
+  if (session.user) {
+    session.user.id = String(typedToken.id ?? "");
+    session.user.role = normalizeRole(
+      String(typedToken.role ?? "CANDIDATE")
+    ) as AppUserRole;
+    session.user.email = session.user.email ?? undefined;
+  }
+
+  return session;
+},
     async redirect({ baseUrl, url }) {
       if (url.startsWith("/")) return `${baseUrl}${url}`;
       if (url.startsWith(baseUrl)) return url;
