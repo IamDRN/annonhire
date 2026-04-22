@@ -1,4 +1,5 @@
 import { EmployerVerificationStatus } from "@prisma/client";
+import { getRoleDashboardPath } from "@/lib/auth/roles";
 import { prisma } from "@/lib/db/prisma";
 import { maskCompanyName } from "@/lib/utils";
 
@@ -68,8 +69,8 @@ export async function getAdminDashboard() {
       include: { company: true, user: true }
     }),
     prisma.candidateProfile.findMany({
-      where: { searchVisibility: false },
-      include: { user: true }
+      where: { privacySetting: { is: { searchable: false } } },
+      include: { user: true, privacySetting: true }
     }),
     prisma.auditLog.findMany({
       orderBy: { createdAt: "desc" },
@@ -137,7 +138,7 @@ export async function getNotificationsForUser(userId: string) {
   return prisma.notification.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
-    take: 8
+    take: 20
   });
 }
 
@@ -169,7 +170,5 @@ export async function getDemoAnonymousProfile(profileIdOrSlug: string) {
 export async function getRoleHome(userId: string) {
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) return "/";
-  if (user.role === "CANDIDATE") return "/candidate/dashboard";
-  if (user.role === "EMPLOYER") return "/employer/dashboard";
-  return "/admin/dashboard";
+  return getRoleDashboardPath(user.role);
 }

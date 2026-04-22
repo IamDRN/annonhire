@@ -11,10 +11,11 @@ type SidebarLink = {
 
 const candidateLinks: SidebarLink[] = [
   { href: "/candidate/dashboard", label: "Overview", icon: Home },
+  { href: "/candidate/onboarding", label: "Complete Profile", icon: Shield },
   { href: "/candidate/requests", label: "Employer Requests", icon: BriefcaseBusiness },
   { href: "/candidate/profile/demo", label: "Anonymous Profile", icon: Shield },
   { href: "/candidate/dashboard#privacy", label: "Privacy Controls", icon: Settings },
-  { href: "/candidate/dashboard#notifications", label: "Notifications", icon: Bell }
+  { href: "/candidate/dashboard", label: "Notifications", icon: Bell }
 ];
 
 const employerLinks: SidebarLink[] = [

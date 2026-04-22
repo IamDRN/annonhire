@@ -1,10 +1,9 @@
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
 import type { AppUserRole } from "@/lib/auth/auth";
-import { authOptions } from "@/lib/auth/auth";
+import { auth } from "@/lib/auth/auth";
 
 export async function getCurrentSession() {
-  return getServerSession(authOptions);
+  return auth();
 }
 
 export async function requireRole(roles: AppUserRole[]) {

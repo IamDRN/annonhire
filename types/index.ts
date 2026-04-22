@@ -32,6 +32,7 @@ export type CandidateCardView = {
   workMode: WorkMode;
   noticePeriod: NoticePeriod;
   matchScore: number;
+  profileCompleteness: number;
   skills: string[];
   summary: string | null;
 };

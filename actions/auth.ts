@@ -22,7 +22,9 @@ export async function registerCandidate(input: FormData) {
       candidateProfile: {
         create: {
           anonymousId: `ANON-${Math.random().toString(36).slice(2, 7).toUpperCase()}`,
-          profileCompleteness: 12
+          profileCompleteness: 0,
+          onboardingCompleted: false,
+          onboardingStep: 1
         }
       }
     }

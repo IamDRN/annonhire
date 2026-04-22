@@ -1,8 +1,9 @@
 import bcrypt from "bcryptjs";
-import type { DefaultSession, NextAuthOptions } from "next-auth";
+import NextAuth, { type DefaultSession, type NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "@/lib/db/prisma";
+import { normalizeRole } from "@/lib/auth/roles";
 
 export type AppUserRole = "CANDIDATE" | "EMPLOYER" | "ADMIN";
 
@@ -33,7 +34,7 @@ function createAnonymousId() {
 
 export const googleAuthEnabled = Boolean(process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET);
 
-const providers: NextAuthOptions["providers"] = [
+const providers: NextAuthConfig["providers"] = [
   ...(googleAuthEnabled
     ? [
         GoogleProvider({
@@ -50,15 +51,18 @@ const providers: NextAuthOptions["providers"] = [
       password: { label: "Password", type: "password" }
     },
     async authorize(credentials) {
-      if (!credentials?.email || !credentials.password) return null;
+      const email = typeof credentials?.email === "string" ? credentials.email.toLowerCase() : null;
+      const password = typeof credentials?.password === "string" ? credentials.password : null;
+
+      if (!email || !password) return null;
 
       const user = await prisma.user.findUnique({
-        where: { email: credentials.email.toLowerCase() }
+        where: { email }
       });
 
       if (!user?.passwordHash) return null;
 
-      const isValid = await bcrypt.compare(credentials.password, user.passwordHash);
+      const isValid = await bcrypt.compare(password, user.passwordHash);
       if (!isValid) return null;
 
       return {
@@ -66,13 +70,13 @@ const providers: NextAuthOptions["providers"] = [
         email: user.email ?? undefined,
         name: user.name ?? undefined,
         image: user.image ?? undefined,
-        role: (user.role as AppUserRole) ?? "CANDIDATE"
+        role: normalizeRole(user.role) as AppUserRole
       };
     }
   })
 ];
 
-export const authOptions: NextAuthOptions = {
+export const authConfig: NextAuthConfig = {
   secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt"
@@ -109,11 +113,15 @@ export const authOptions: NextAuthOptions = {
               data: {
                 userId: dbUser.id,
                 anonymousId: createAnonymousId(),
-                profileCompleteness: 12
+                profileCompleteness: 0,
+                onboardingCompleted: false,
+                onboardingStep: 1
               }
             });
           }
         }
+
+        return true;
       }
 
       return true;
@@ -121,7 +129,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.role = user.role;
+        token.role = normalizeRole(user.role) as AppUserRole;
       }
 
       if (token.email) {
@@ -131,7 +139,7 @@ export const authOptions: NextAuthOptions = {
 
         if (dbUser) {
           token.id = dbUser.id;
-          token.role = (dbUser.role as AppUserRole) ?? "CANDIDATE";
+          token.role = normalizeRole(dbUser.role) as AppUserRole;
           token.name = dbUser.name ?? token.name;
           token.picture = dbUser.image ?? token.picture;
         }
@@ -142,7 +150,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = String(token.id ?? "");
-        session.user.role = (token.role as AppUserRole) ?? "CANDIDATE";
+        session.user.role = normalizeRole(String(token.role ?? "CANDIDATE")) as AppUserRole;
         session.user.email = session.user.email ?? null;
       }
 
@@ -155,3 +163,5 @@ export const authOptions: NextAuthOptions = {
     }
   }
 };
+
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);

@@ -1,4 +1,5 @@
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
+import { NotificationBell } from "@/components/notifications/notification-bell";
 import { StatsCards } from "@/components/dashboard/stats-cards";
 import { RequestStatusBadge } from "@/components/employer/request-status-badge";
 import { ProtectedRoute } from "@/components/ui/protected-route";
@@ -23,9 +24,12 @@ export default async function EmployerDashboardPage() {
       <main className="container-width grid gap-6 py-10 lg:grid-cols-[280px_1fr]">
         <DashboardSidebar role="employer" />
         <div className="space-y-6">
-          <div>
-            <h1 className="text-3xl font-semibold tracking-tight">Employer dashboard</h1>
-            <p className="mt-2 text-sm text-muted">Manage verification, search access, saved candidates, and outbound contact requests.</p>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-semibold tracking-tight">Employer dashboard</h1>
+              <p className="mt-2 text-sm text-muted">Manage verification, search access, saved candidates, and outbound contact requests.</p>
+            </div>
+            <NotificationBell />
           </div>
           <StatsCards
             items={[

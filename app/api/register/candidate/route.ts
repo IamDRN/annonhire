@@ -2,6 +2,8 @@ import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { candidateSignupSchema } from "@/lib/validations";
+import { sendCandidateWelcomeEmail } from "@/services/email-service";
+import { createNotification } from "@/services/notification-service";
 
 export async function POST(request: Request) {
   try {
@@ -23,11 +25,22 @@ export async function POST(request: Request) {
         candidateProfile: {
           create: {
             anonymousId: `AH-${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
-            profileCompleteness: 12
+            profileCompleteness: 0,
+            onboardingCompleted: false,
+            onboardingStep: 1
           }
         }
       }
     });
+
+    await createNotification(
+      user.id,
+      "Welcome to AnonHire",
+      "Complete your anonymous profile, review privacy settings, and start exploring opportunities safely.",
+      "welcome"
+    );
+
+    await sendCandidateWelcomeEmail({ to: email });
 
     return NextResponse.json({ userId: user.id });
   } catch (error) {

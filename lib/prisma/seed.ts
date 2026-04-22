@@ -130,7 +130,7 @@ async function main() {
   });
 
   await prisma.user.create({
-    data: { email: "admin@anonhire.dev", passwordHash, role: "ADMIN", emailVerifiedAt: new Date() }
+    data: { email: "admin@anonhire.dev", passwordHash, role: "ADMIN", emailVerified: new Date() }
   });
 
   await prisma.user.create({
@@ -138,7 +138,7 @@ async function main() {
       email: "recruiter@northridge.example",
       passwordHash,
       role: "EMPLOYER",
-      emailVerifiedAt: new Date(),
+      emailVerified: new Date(),
       employerProfile: {
         create: {
           fullName: "Avery Morgan",
@@ -157,7 +157,7 @@ async function main() {
       email: "hiring@summitcloud.example",
       passwordHash,
       role: "EMPLOYER",
-      emailVerifiedAt: new Date(),
+      emailVerified: new Date(),
       employerProfile: {
         create: {
           fullName: "Jordan Lee",
@@ -177,7 +177,7 @@ async function main() {
         email: fixture.email,
         passwordHash,
         role: "CANDIDATE",
-        emailVerifiedAt: new Date(),
+        emailVerified: new Date(),
         candidateProfile: {
           create: {
             anonymousId: fixture.anonymousId,

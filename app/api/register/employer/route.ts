@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { employerSignupSchema } from "@/lib/validations";
+import { sendEmployerWelcomeEmail } from "@/services/email-service";
+import { createNotification } from "@/services/notification-service";
 
 export async function POST(request: Request) {
   try {
@@ -41,6 +43,15 @@ export async function POST(request: Request) {
         }
       }
     });
+
+    await createNotification(
+      user.id,
+      "Welcome to AnonHire",
+      "Complete company verification to unlock the full anonymous candidate search experience.",
+      "welcome"
+    );
+
+    await sendEmployerWelcomeEmail({ to: email });
 
     return NextResponse.json({ userId: user.id });
   } catch (error) {

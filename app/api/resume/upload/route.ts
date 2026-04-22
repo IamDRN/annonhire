@@ -1,11 +1,11 @@
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth/auth";
+import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/db/prisma";
 import { resumeUploadSchema } from "@/lib/validations";
 import { parseResumeMock } from "@/services/resume-parser";
+import { updateCandidateOnboardingStep } from "@/services/profile-completeness-service";
 
 const FIVE_MB = 5 * 1024 * 1024;
 
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
   }
 
   const parsed = await parseResumeMock({ fileName: file.name });
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (session?.user) {
     const candidate = await prisma.candidateProfile.findUnique({
@@ -67,6 +67,10 @@ export async function POST(request: Request) {
           parsedAt: new Date()
         }
       });
+
+      if (candidate.onboardingStep < 2) {
+        await updateCandidateOnboardingStep(candidate.id, 2);
+      }
     }
   }
 

@@ -17,7 +17,12 @@ export function CandidateCard({ candidate, employerProfileId }: { candidate: Can
           <CardTitle className="mt-2">{candidate.headline ?? "Anonymous candidate"}</CardTitle>
           <p className="mt-2 text-sm text-muted">{candidate.summary}</p>
         </div>
-        <Badge variant="success">{candidate.matchScore}% match</Badge>
+          <div className="flex flex-wrap gap-2">
+          {candidate.profileCompleteness >= 80 ? (
+            <Badge variant="info">{candidate.profileCompleteness}% complete</Badge>
+          ) : null}
+          <Badge variant="success">{candidate.matchScore}% match</Badge>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="grid gap-3 text-sm text-slate-600 sm:grid-cols-2">

@@ -11,7 +11,9 @@ import { useToast } from "@/components/ui/toaster";
 
 export function PrivacySettingsPanel({
   candidateProfileId,
-  initial
+  initial,
+  submitLabel = "Save privacy settings",
+  onSaved
 }: {
   candidateProfileId: string;
   initial: {
@@ -23,6 +25,8 @@ export function PrivacySettingsPanel({
     allowMessagingOnly: boolean;
     blockedDomains: string[];
   };
+  submitLabel?: string;
+  onSaved?: () => void | Promise<void>;
 }) {
   const [form, setForm] = useState(initial);
   const [isPending, startTransition] = useTransition();
@@ -116,11 +120,12 @@ export function PrivacySettingsPanel({
           onClick={() =>
             startTransition(async () => {
               await updatePrivacySettings(candidateProfileId, form);
+              await onSaved?.();
               pushToast({ title: "Privacy updated", description: "Your visibility and disclosure settings were saved." });
             })
           }
         >
-          {isPending ? "Saving..." : "Save privacy settings"}
+          {isPending ? "Saving..." : submitLabel}
         </Button>
       </div>
     </Card>

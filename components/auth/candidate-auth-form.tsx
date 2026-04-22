@@ -14,6 +14,7 @@ import { FormErrorMessage } from "@/components/auth/form-error-message";
 import { PasswordInput } from "@/components/auth/password-input";
 import { SocialLoginButton } from "@/components/auth/social-login-button";
 import { TrustBadgeRow } from "@/components/auth/trust-badge-row";
+import { getRoleDashboardPath } from "@/lib/auth/roles";
 
 type Mode = "login" | "signup";
 
@@ -58,7 +59,7 @@ export function CandidateAuthForm({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/candidate/dashboard";
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/candidate/onboarding";
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -120,7 +121,7 @@ export function CandidateAuthForm({
 
       const session = await getSession();
       const role = session?.user?.role;
-      router.push(role === "EMPLOYER" ? "/employer/dashboard" : role === "ADMIN" ? "/admin/dashboard" : callbackUrl);
+      router.push(callbackUrl === "/candidate/dashboard" ? getRoleDashboardPath(role) : callbackUrl);
     });
 
   return (

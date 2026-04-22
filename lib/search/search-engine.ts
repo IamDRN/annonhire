@@ -9,8 +9,11 @@ export interface CandidateSearchProvider {
 class PrismaCandidateSearchProvider implements CandidateSearchProvider {
   async search(filters: SearchFilters): Promise<CandidateCardView[]> {
     const where: Prisma.CandidateProfileWhereInput = {
-      searchVisibility: true,
-      isSearchable: true,
+      AND: [
+        {
+          OR: [{ privacySetting: { is: null } }, { privacySetting: { is: { searchable: true } } }]
+        }
+      ],
       ...(filters.keyword
         ? {
             OR: [
@@ -61,7 +64,8 @@ class PrismaCandidateSearchProvider implements CandidateSearchProvider {
       where,
       orderBy,
       include: {
-        skills: true
+        skills: true,
+        privacySetting: true
       },
       take: 30
     });
@@ -85,6 +89,7 @@ class PrismaCandidateSearchProvider implements CandidateSearchProvider {
         workMode: record.workMode,
         noticePeriod: record.noticePeriod,
         matchScore,
+        profileCompleteness: record.profileCompleteness,
         skills: skillNames,
         summary: record.summary
       };

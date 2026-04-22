@@ -12,6 +12,7 @@ import { AuthFooterLink } from "@/components/auth/auth-footer-link";
 import { FormErrorMessage } from "@/components/auth/form-error-message";
 import { PasswordInput } from "@/components/auth/password-input";
 import { TrustBadgeRow } from "@/components/auth/trust-badge-row";
+import { getRoleDashboardPath } from "@/lib/auth/roles";
 
 type Mode = "login" | "signup";
 
@@ -148,7 +149,7 @@ export function EmployerAuthForm({ mode }: { mode: Mode }) {
               return;
             }
 
-            router.push("/employer/dashboard");
+            router.push(getRoleDashboardPath("EMPLOYER"));
           })
         }
       >

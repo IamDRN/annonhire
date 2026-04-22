@@ -1,5 +1,6 @@
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { RequestStatusBadge } from "@/components/employer/request-status-badge";
+import { NotificationBell } from "@/components/notifications/notification-bell";
 import { ProtectedRoute } from "@/components/ui/protected-route";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,9 +21,12 @@ export default async function CandidateRequestsPage() {
       <main className="container-width grid gap-6 py-10 lg:grid-cols-[280px_1fr]">
         <DashboardSidebar role="candidate" />
         <div className="space-y-6">
-          <div>
-            <h1 className="text-3xl font-semibold tracking-tight">Employer requests</h1>
-            <p className="mt-2 text-sm text-muted">Approve, reject, or ask for more information before revealing anything.</p>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-semibold tracking-tight">Employer requests</h1>
+              <p className="mt-2 text-sm text-muted">Approve, reject, or ask for more information before revealing anything.</p>
+            </div>
+            <NotificationBell />
           </div>
           {(profile?.receivedRequests ?? []).map((request) => (
             <Card key={request.id}>

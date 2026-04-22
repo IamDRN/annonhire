@@ -1,4 +1,5 @@
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
+import { NotificationBell } from "@/components/notifications/notification-bell";
 import { StatsCards } from "@/components/dashboard/stats-cards";
 import { ProtectedRoute } from "@/components/ui/protected-route";
 import { Card } from "@/components/ui/card";
@@ -14,9 +15,12 @@ export default async function AdminDashboardPage() {
       <main className="container-width grid gap-6 py-10 lg:grid-cols-[280px_1fr]">
         <DashboardSidebar role="admin" />
         <div className="space-y-6">
-          <div>
-            <h1 className="text-3xl font-semibold tracking-tight">Admin dashboard</h1>
-            <p className="mt-2 text-sm text-muted">Moderate employers, review candidate flags, inspect audit events, and monitor platform activity.</p>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-semibold tracking-tight">Admin dashboard</h1>
+              <p className="mt-2 text-sm text-muted">Moderate employers, review candidate flags, inspect audit events, and monitor platform activity.</p>
+            </div>
+            <NotificationBell />
           </div>
           <StatsCards
             items={[

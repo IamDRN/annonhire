@@ -1,12 +1,11 @@
 import { EmployerVerificationStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth/auth";
+import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/db/prisma";
 import { createNotification } from "@/services/notification-service";
 
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session?.user || session.user.role !== "ADMIN") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
@@ -21,7 +20,8 @@ export async function POST(request: Request) {
   await createNotification(
     employer.userId,
     "Employer verification updated",
-    `Your verification status is now ${body.status.toLowerCase()}.`
+    `Your verification status is now ${body.status.toLowerCase()}.`,
+    "verification_update"
   );
 
   return NextResponse.json({ employer });

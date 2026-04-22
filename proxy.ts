@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { getRoleDashboardPath, normalizeRole } from "@/lib/auth/roles";
 
-const candidateProtected = ["/candidate/dashboard", "/candidate/requests"];
+const candidateProtected = ["/candidate/dashboard", "/candidate/requests", "/candidate/onboarding"];
 const employerProtected = ["/employer/dashboard", "/employer/search"];
 const adminProtected = ["/admin"];
 
@@ -28,18 +29,18 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  const role = String(token.role ?? "CANDIDATE");
+  const role = normalizeRole(String(token.role ?? "CANDIDATE"));
 
   if (candidateProtected.some((route) => pathname.startsWith(route)) && role !== "CANDIDATE") {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL(getRoleDashboardPath(role), request.url));
   }
 
   if (employerProtected.some((route) => pathname.startsWith(route)) && role !== "EMPLOYER") {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL(getRoleDashboardPath(role), request.url));
   }
 
   if (adminProtected.some((route) => pathname.startsWith(route)) && role !== "ADMIN") {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL(getRoleDashboardPath(role), request.url));
   }
 
   return NextResponse.next();

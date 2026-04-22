@@ -12,10 +12,14 @@ import { useToast } from "@/components/ui/toaster";
 
 export function ParsedResumeEditor({
   candidateProfileId,
-  initialValue
+  initialValue,
+  submitLabel = "Save parsed profile",
+  onSaved
 }: {
   candidateProfileId: string;
   initialValue: Record<string, any>;
+  submitLabel?: string;
+  onSaved?: () => void | Promise<void>;
 }) {
   const [form, setForm] = useState(initialValue);
   const [isPending, startTransition] = useTransition();
@@ -221,11 +225,12 @@ export function ParsedResumeEditor({
           onClick={() =>
             startTransition(async () => {
               await saveParsedResume(candidateProfileId, form);
+              await onSaved?.();
               pushToast({ title: "Profile draft saved", description: "Your anonymous profile is ready for review." });
             })
           }
         >
-          {isPending ? "Saving..." : "Save parsed profile"}
+          {isPending ? "Saving..." : submitLabel}
         </Button>
       </div>
     </Card>

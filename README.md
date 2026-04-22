@@ -43,6 +43,9 @@ AUTH_GOOGLE_SECRET=
 NEXTAUTH_URL=
 UPLOAD_DIR=
 CONTACT_REVEAL_MODE=
+RESEND_API_KEY=
+EMAIL_FROM=
+APP_URL=
 ```
 
 Google callback URL:
@@ -110,6 +113,26 @@ npm run build
 - In development, missing Google OAuth variables will not crash the app; candidate auth falls back to credentials.
 - Resume file storage currently degrades gracefully when filesystem persistence is unavailable. Replace it with object storage such as UploadThing or S3 for production durability.
 - Forgot password and email verification are still placeholders and should be replaced with transactional email flows.
+- Transactional email notifications use Resend. Verify your sending domain and set `EMAIL_FROM` to a verified sender identity before enabling email in production.
+
+## Transactional Email
+
+AnonHire sends transactional emails for:
+
+- New candidate signup
+- New employer signup
+- New employer contact request to a candidate
+- Candidate approval of a contact request
+- Candidate rejection of a contact request
+
+Resend setup:
+
+1. Create a Resend API key and store it in `RESEND_API_KEY`.
+2. Verify your sending domain in Resend.
+3. Set `EMAIL_FROM` to a verified sender, for example `AnonHire <notifications@your-domain.com>`.
+4. Set `APP_URL` to your local or production app URL so dashboard links in emails resolve correctly.
+
+If Resend is not configured, the core product flows still succeed and email delivery is skipped with server-side logging.
 
 ## Recommended Phase 2
 

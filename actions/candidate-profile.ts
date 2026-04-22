@@ -3,6 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db/prisma";
 import { parsedResumeSchema, privacySettingsSchema } from "@/lib/validations";
+import {
+  markCandidateOnboardingCompleted,
+  syncCandidateProfileCompleteness,
+  updateCandidateOnboardingStep
+} from "@/services/profile-completeness-service";
 
 export async function saveParsedResume(candidateProfileId: string, values: unknown) {
   const payload = parsedResumeSchema.parse(values);
@@ -24,7 +29,9 @@ export async function saveParsedResume(candidateProfileId: string, values: unkno
       salaryExpectationMax: payload.salaryExpectation.max,
       noticePeriod: payload.noticePeriod,
       workMode: payload.workMode,
-      profileCompleteness: 82,
+      onboardingStep: {
+        set: 3
+      },
       skills: {
         create: payload.skills.map((name) => ({ name }))
       },
@@ -45,6 +52,9 @@ export async function saveParsedResume(candidateProfileId: string, values: unkno
     }
   });
 
+  await syncCandidateProfileCompleteness(candidateProfileId);
+
+  revalidatePath("/candidate/onboarding");
   revalidatePath("/candidate/dashboard");
 }
 
@@ -72,14 +82,6 @@ export async function updatePrivacySettings(candidateProfileId: string, values: 
     }
   });
 
-  await prisma.candidateProfile.update({
-    where: { id: candidateProfileId },
-    data: {
-      searchVisibility: payload.searchable,
-      isSearchable: payload.searchable
-    }
-  });
-
   await prisma.blockedEmployer.deleteMany({ where: { candidateProfileId } });
   if (payload.blockedDomains.length) {
     await prisma.blockedEmployer.createMany({
@@ -90,5 +92,20 @@ export async function updatePrivacySettings(candidateProfileId: string, values: 
     });
   }
 
+  await syncCandidateProfileCompleteness(candidateProfileId);
+
+  revalidatePath("/candidate/onboarding");
+  revalidatePath("/candidate/dashboard");
+}
+
+export async function saveOnboardingStep(candidateProfileId: string, step: number) {
+  await updateCandidateOnboardingStep(candidateProfileId, step);
+  revalidatePath("/candidate/onboarding");
+  revalidatePath("/candidate/dashboard");
+}
+
+export async function completeCandidateOnboarding(candidateProfileId: string) {
+  await markCandidateOnboardingCompleted(candidateProfileId);
+  revalidatePath("/candidate/onboarding");
   revalidatePath("/candidate/dashboard");
 }
