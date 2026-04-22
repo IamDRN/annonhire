@@ -1,51 +1,58 @@
+// proxy.ts
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { getToken } from "next-auth/jwt";
-import { getRoleDashboardPath, normalizeRole } from "@/lib/auth/roles";
+import { auth } from "@/lib/auth/auth";
 
-const candidateProtected = ["/candidate/dashboard", "/candidate/requests", "/candidate/onboarding"];
-const employerProtected = ["/employer/dashboard", "/employer/search"];
-const adminProtected = ["/admin"];
+export default auth((req) => {
+  const { nextUrl } = req;
+  const token = req.auth;
+  const pathname = nextUrl.pathname;
 
-export async function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  const isProtected =
-    candidateProtected.some((route) => pathname.startsWith(route)) ||
-    employerProtected.some((route) => pathname.startsWith(route)) ||
-    adminProtected.some((route) => pathname.startsWith(route));
+  const publicRoutes = [
+    "/",
+    "/candidate/login",
+    "/candidate/signup",
+    "/employer/login",
+    "/employer/signup",
+  ];
 
-  if (!isProtected) {
+  const isPublicRoute = publicRoutes.includes(pathname);
+  const isAuthRoute = pathname.startsWith("/api/auth");
+
+  if (isPublicRoute || isAuthRoute) {
     return NextResponse.next();
   }
 
-  const token = await getToken({
-    req: request,
-    secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET
-  });
-
-  if (!token) {
-    const loginUrl = new URL("/candidate/login", request.url);
-    loginUrl.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(loginUrl);
+  if (!token?.user) {
+    return NextResponse.redirect(new URL("/candidate/login", req.url));
   }
 
-  const role = normalizeRole(String(token.role ?? "CANDIDATE"));
+  const role = String(token.user.role ?? "").toUpperCase();
 
-  if (candidateProtected.some((route) => pathname.startsWith(route)) && role !== "CANDIDATE") {
-    return NextResponse.redirect(new URL(getRoleDashboardPath(role), request.url));
+  if (pathname.startsWith("/candidate")) {
+    if (role !== "CANDIDATE") {
+      return NextResponse.redirect(new URL("/employer/dashboard", req.url));
+    }
   }
 
-  if (employerProtected.some((route) => pathname.startsWith(route)) && role !== "EMPLOYER") {
-    return NextResponse.redirect(new URL(getRoleDashboardPath(role), request.url));
+  if (pathname.startsWith("/employer")) {
+    if (role !== "EMPLOYER") {
+      return NextResponse.redirect(new URL("/candidate/dashboard", req.url));
+    }
   }
 
-  if (adminProtected.some((route) => pathname.startsWith(route)) && role !== "ADMIN") {
-    return NextResponse.redirect(new URL(getRoleDashboardPath(role), request.url));
+  if (pathname.startsWith("/admin")) {
+    if (role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
   }
 
   return NextResponse.next();
-}
+});
 
 export const config = {
-  matcher: ["/candidate/:path*", "/employer/:path*", "/admin/:path*"]
+  matcher: [
+    "/candidate/:path*",
+    "/employer/:path*",
+    "/admin/:path*",
+  ],
 };
