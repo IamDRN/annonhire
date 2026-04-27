@@ -66,12 +66,29 @@ export const parsedResumeSchema = z.object({
 
 export const privacySettingsSchema = z.object({
   searchable: z.boolean(),
+  showEmail: z.boolean(),
+  showPhone: z.boolean(),
   showExactCity: z.boolean(),
   companyMode: z.nativeEnum(PrivacyCompanyMode),
   revealEducationInstitution: z.boolean(),
   revealGraduationYear: z.boolean(),
   allowMessagingOnly: z.boolean(),
   blockedDomains: z.array(z.string())
+});
+
+export const candidateOnboardingStepOneSchema = z.object({
+  fullName: z.string().min(2),
+  headline: z.string().min(2)
+});
+
+export const candidateOnboardingStepTwoSchema = z.object({
+  skills: z.array(z.string().min(1)).min(1),
+  yearsOfExperience: z.number().min(0).max(50)
+});
+
+export const candidateOnboardingStepFourSchema = z.object({
+  showEmail: z.boolean(),
+  showPhone: z.boolean()
 });
 
 export const contactRequestSchema = z.object({

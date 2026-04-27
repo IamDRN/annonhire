@@ -68,8 +68,8 @@ export async function POST(request: Request) {
         }
       });
 
-      if (candidate.onboardingStep < 2) {
-        await updateCandidateOnboardingStep(candidate.id, 2);
+      if (candidate.onboardingStep < 4) {
+        await updateCandidateOnboardingStep(candidate.id, 4);
       }
     }
   }

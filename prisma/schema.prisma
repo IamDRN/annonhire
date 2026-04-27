@@ -236,6 +236,8 @@ model PrivacySetting {
   id                         String             @id @default(cuid())
   candidateProfileId         String             @unique
   searchable                 Boolean            @default(true)
+  showEmail                  Boolean            @default(false)
+  showPhone                  Boolean            @default(false)
   showExactCity              Boolean            @default(false)
   companyMode                PrivacyCompanyMode @default(MASKED)
   revealEducationInstitution Boolean            @default(false)

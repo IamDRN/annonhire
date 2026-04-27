@@ -138,6 +138,8 @@ export default async function CandidateDashboardPage() {
               candidateProfileId={profile.id}
               initial={{
                 searchable: profile.privacySetting?.searchable ?? true,
+                showEmail: profile.privacySetting?.showEmail ?? false,
+                showPhone: profile.privacySetting?.showPhone ?? false,
                 showExactCity: profile.privacySetting?.showExactCity ?? false,
                 companyMode: profile.privacySetting?.companyMode ?? "MASKED",
                 revealEducationInstitution: profile.privacySetting?.revealEducationInstitution ?? false,

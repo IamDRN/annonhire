@@ -18,6 +18,8 @@ export function PrivacySettingsPanel({
   candidateProfileId: string;
   initial: {
     searchable: boolean;
+    showEmail: boolean;
+    showPhone: boolean;
     showExactCity: boolean;
     companyMode: "EXACT" | "MASKED" | "INDUSTRY_ONLY";
     revealEducationInstitution: boolean;
@@ -44,6 +46,24 @@ export function PrivacySettingsPanel({
             onChange={(event) => setForm({ ...form, searchable: event.target.checked })}
           />
           Searchable by verified employers
+        </label>
+        <label className="rounded-2xl border border-slate-200 p-4 text-sm">
+          <input
+            type="checkbox"
+            className="mr-2"
+            checked={form.showEmail}
+            onChange={(event) => setForm({ ...form, showEmail: event.target.checked })}
+          />
+          Reveal email after approval
+        </label>
+        <label className="rounded-2xl border border-slate-200 p-4 text-sm">
+          <input
+            type="checkbox"
+            className="mr-2"
+            checked={form.showPhone}
+            onChange={(event) => setForm({ ...form, showPhone: event.target.checked })}
+          />
+          Reveal phone after approval
         </label>
         <label className="rounded-2xl border border-slate-200 p-4 text-sm">
           <input

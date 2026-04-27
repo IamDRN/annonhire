@@ -2,7 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db/prisma";
-import { parsedResumeSchema, privacySettingsSchema } from "@/lib/validations";
+import {
+  candidateOnboardingStepFourSchema,
+  candidateOnboardingStepOneSchema,
+  candidateOnboardingStepTwoSchema,
+  parsedResumeSchema,
+  privacySettingsSchema
+} from "@/lib/validations";
 import {
   markCandidateOnboardingCompleted,
   syncCandidateProfileCompleteness,
@@ -58,6 +64,71 @@ export async function saveParsedResume(candidateProfileId: string, values: unkno
   revalidatePath("/candidate/dashboard");
 }
 
+export async function saveCandidateOnboardingBasics(candidateProfileId: string, values: unknown) {
+  const payload = candidateOnboardingStepOneSchema.parse(values);
+
+  await prisma.candidateProfile.update({
+    where: { id: candidateProfileId },
+    data: {
+      fullName: payload.fullName,
+      headline: payload.headline,
+      onboardingStep: 2
+    }
+  });
+
+  await syncCandidateProfileCompleteness(candidateProfileId);
+  revalidatePath("/candidate/onboarding");
+  revalidatePath("/candidate/dashboard");
+}
+
+export async function saveCandidateOnboardingSkills(candidateProfileId: string, values: unknown) {
+  const payload = candidateOnboardingStepTwoSchema.parse(values);
+
+  await prisma.skill.deleteMany({ where: { candidateProfileId } });
+  await prisma.candidateProfile.update({
+    where: { id: candidateProfileId },
+    data: {
+      yearsOfExperience: payload.yearsOfExperience,
+      onboardingStep: 3,
+      skills: {
+        create: payload.skills.map((name) => ({ name }))
+      }
+    }
+  });
+
+  await syncCandidateProfileCompleteness(candidateProfileId);
+  revalidatePath("/candidate/onboarding");
+  revalidatePath("/candidate/dashboard");
+}
+
+export async function saveCandidateOnboardingPrivacy(candidateProfileId: string, values: unknown) {
+  const payload = candidateOnboardingStepFourSchema.parse(values);
+
+  await prisma.privacySetting.upsert({
+    where: { candidateProfileId },
+    update: {
+      showEmail: payload.showEmail,
+      showPhone: payload.showPhone
+    },
+    create: {
+      candidateProfileId,
+      showEmail: payload.showEmail,
+      showPhone: payload.showPhone
+    }
+  });
+
+  await prisma.candidateProfile.update({
+    where: { id: candidateProfileId },
+    data: {
+      onboardingStep: 5
+    }
+  });
+
+  await syncCandidateProfileCompleteness(candidateProfileId);
+  revalidatePath("/candidate/onboarding");
+  revalidatePath("/candidate/dashboard");
+}
+
 export async function updatePrivacySettings(candidateProfileId: string, values: unknown) {
   const payload = privacySettingsSchema.parse(values);
 
@@ -65,6 +136,8 @@ export async function updatePrivacySettings(candidateProfileId: string, values: 
     where: { candidateProfileId },
     update: {
       searchable: payload.searchable,
+      showEmail: payload.showEmail,
+      showPhone: payload.showPhone,
       showExactCity: payload.showExactCity,
       companyMode: payload.companyMode,
       revealEducationInstitution: payload.revealEducationInstitution,
@@ -74,6 +147,8 @@ export async function updatePrivacySettings(candidateProfileId: string, values: 
     create: {
       candidateProfileId,
       searchable: payload.searchable,
+      showEmail: payload.showEmail,
+      showPhone: payload.showPhone,
       showExactCity: payload.showExactCity,
       companyMode: payload.companyMode,
       revealEducationInstitution: payload.revealEducationInstitution,
