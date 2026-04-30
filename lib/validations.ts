@@ -112,8 +112,11 @@ export const searchFiltersSchema = z.object({
   certification: z.string().optional(),
   language: z.string().optional(),
   workMode: z.nativeEnum(WorkMode).optional(),
+  workModes: z.array(z.nativeEnum(WorkMode)).optional(),
+  experienceLevels: z.array(z.enum(["entry", "mid", "senior", "manager", "director"])).optional(),
+  categories: z.array(z.enum(["HR", "Finance", "IT", "Sales", "Marketing", "Operations", "Customer Service"])).optional(),
   availability: z.string().optional(),
   lastActiveDays: z.coerce.number().optional(),
   profileCompleteness: z.coerce.number().optional(),
-  sortBy: z.enum(["best_match", "newest", "highest_experience", "earliest_availability"]).optional()
+  sortBy: z.enum(["best_match", "newest", "highest_experience", "earliest_availability", "salary_high_to_low", "experience_low_to_high"]).optional()
 });

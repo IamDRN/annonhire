@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { WorkMode } from "@prisma/client";
 import { auth } from "@/lib/auth/auth";
 import { canEmployerSearch, searchEmployerCandidates } from "@/lib/search/search-engine";
 import { searchFiltersSchema } from "@/lib/validations";
+import { WorkMode } from "@prisma/client";
 
 export async function GET(request: Request) {
   const session = await auth();
@@ -51,5 +51,9 @@ export async function GET(request: Request) {
   });
 
   const { results, employerProfileId } = await searchEmployerCandidates(session.user.id, filters);
-  return NextResponse.json({ employerProfileId, results });
+
+  return NextResponse.json({
+    employerProfileId,
+    results
+  });
 }

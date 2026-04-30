@@ -12,7 +12,10 @@ export function MarketingSection({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className={cn("border-b border-slate-200/80 py-20 md:py-28 dark:border-slate-800", className)}>
+    <section
+      id={id}
+      className={cn("border-b border-slate-200/70 py-[4.5rem] md:py-24 dark:border-slate-800", className)}
+    >
       <div className="mx-auto max-w-7xl px-6">{children}</div>
     </section>
   );
@@ -33,7 +36,7 @@ export function SectionHeading({
 
   return (
     <div className={alignment}>
-      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700 dark:text-sky-300">{eyebrow}</p>
+      <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary dark:text-sky-300">{eyebrow}</p>
       <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-950 md:text-4xl dark:text-white">{title}</h2>
       <p className="mt-4 text-base leading-7 text-slate-600 md:text-lg dark:text-slate-300">{description}</p>
     </div>
@@ -125,10 +128,10 @@ export function MarketingLinkButton({
     <Link
       href={href}
       className={cn(
-        "inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition-all",
+        "inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition-all duration-200",
         variant === "primary"
-          ? "bg-primary text-white shadow-soft hover:-translate-y-0.5 hover:bg-sky-500"
-          : "border border-slate-300 bg-white text-slate-700 hover:border-sky-200 hover:bg-sky-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-sky-900 dark:hover:bg-slate-900"
+          ? "bg-primary text-white shadow-[0_16px_40px_-22px_rgba(108,99,255,0.8)] hover:-translate-y-0.5 hover:bg-[#5c54ee]"
+          : "border border-slate-300 bg-white text-slate-700 shadow-sm hover:-translate-y-0.5 hover:border-primary/30 hover:text-primary dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-sky-900 dark:hover:bg-slate-900"
       )}
     >
       {children}

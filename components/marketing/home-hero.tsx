@@ -1,79 +1,128 @@
-import { Lock } from "lucide-react";
-import { InfoItem, MarketingLinkButton, MarketingSection, SkillTag, TrustPill } from "@/components/marketing/home-shared";
+import { Lock, Search, ShieldCheck, Sparkles } from "lucide-react";
+import { InfoItem, MarketingLinkButton, MarketingSection, SkillTag } from "@/components/marketing/home-shared";
 import { BrandLogo } from "@/components/ui/brand-logo";
 
 export function HomeHero() {
   return (
-    <MarketingSection className="overflow-hidden bg-white dark:bg-slate-950">
-      <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-        <div>
-          <BrandLogo className="mb-6" imageClassName="h-12 sm:h-14" priority />
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-4 py-2 text-xs font-medium text-sky-800 dark:border-sky-900 dark:bg-sky-950/40 dark:text-sky-200">
-            <Lock className="h-4 w-4" />
-            Anonymous profiles. Warm, candidate-controlled hiring.
+    <MarketingSection className="overflow-hidden border-b-0 bg-[#f7f8fc] pb-10 pt-10 dark:bg-slate-950">
+      <div className="relative overflow-hidden rounded-[2.2rem] border border-slate-200 bg-white px-5 py-5 shadow-[0_40px_90px_-50px_rgba(15,23,42,0.22)] dark:border-slate-800 dark:bg-slate-950 sm:px-7 sm:py-7 lg:px-8 lg:py-8">
+        <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-br from-indigo-50 via-white to-sky-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900" />
+        <div className="absolute right-8 top-12 h-48 w-48 rounded-full bg-primary/10 blur-3xl" />
+
+        <div className="relative rounded-[1.8rem] border border-slate-200/90 bg-[#f8f9fd] p-5 shadow-[0_30px_70px_-52px_rgba(15,23,42,0.35)] dark:border-slate-800 dark:bg-slate-900 lg:p-8">
+          <div className="flex items-center justify-between gap-4 border-b border-slate-200 pb-4 dark:border-slate-800">
+            <BrandLogo linked={false} imageClassName="h-10 sm:h-11" priority />
+            <div className="hidden items-center gap-3 md:flex">
+              <span className="text-sm text-slate-500 dark:text-slate-400">Anonymous hiring, done right</span>
+              <MarketingLinkButton href="/employer/search" variant="secondary">
+                Search Talent
+              </MarketingLinkButton>
+            </div>
           </div>
 
-          <h1 className="max-w-2xl text-4xl font-bold leading-tight tracking-tight text-slate-950 md:text-5xl dark:text-white">
-            Upload your resume privately and get discovered with confidence.
-          </h1>
-
-          <p className="mt-5 max-w-xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-            AnonHire helps you explore new opportunities without exposing your identity too early. Employers discover
-            your skills, experience, and fit first, then request contact through a secure consent-based flow.
-          </p>
-
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <MarketingLinkButton href="/candidate/signup">Upload Resume</MarketingLinkButton>
-            <MarketingLinkButton href="/employer/signup" variant="secondary">
-              For Employers
-            </MarketingLinkButton>
-          </div>
-
-          <div className="mt-8 grid gap-3 sm:grid-cols-3">
-            <TrustPill label="No public phone number" />
-            <TrustPill label="No public email" />
-            <TrustPill label="You approve contact" />
-          </div>
-        </div>
-
-        <div className="relative">
-          <div className="absolute inset-x-8 top-8 h-40 rounded-full bg-sky-200/40 blur-3xl dark:bg-sky-900/20" />
-          <div className="relative rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-              <div className="mb-5 flex items-start justify-between gap-4">
-                <div>
-                  <div className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 dark:bg-slate-900 dark:text-slate-200">
-                    Candidate #AH-2041
-                  </div>
-                  <h3 className="mt-4 text-2xl font-semibold text-slate-950 dark:text-white">Senior HR Officer</h3>
-                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">5 Years Experience · Kathmandu</p>
-                </div>
-                <div className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-300">
-                  Privacy Protected
-                </div>
+          <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+            <div>
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-4 py-2 text-xs font-semibold text-primary dark:border-slate-700 dark:bg-slate-800 dark:text-sky-300">
+                <Lock className="h-4 w-4" />
+                Candidate identities stay hidden until they say yes.
               </div>
 
-              <div className="mb-5 flex flex-wrap gap-2">
-                {["Recruitment", "Payroll", "Labor Law", "HR Operations", "Excel"].map((skill) => (
-                  <SkillTag key={skill} label={skill} />
+              <h1 className="max-w-2xl text-4xl font-bold leading-tight tracking-tight text-slate-950 md:text-5xl lg:text-[3.55rem] dark:text-white">
+                Find privacy-first opportunities built around your skills.
+              </h1>
+
+              <p className="mt-5 max-w-xl text-base leading-8 text-slate-600 md:text-lg dark:text-slate-300">
+                Explore verified roles, upload your resume anonymously, and let employers discover your fit before
+                they ever see your identity.
+              </p>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <MarketingLinkButton href="/candidate/signup">Upload Resume</MarketingLinkButton>
+                <MarketingLinkButton href="/employer/search" variant="secondary">
+                  Search Talent
+                </MarketingLinkButton>
+              </div>
+
+              <div className="mt-7 flex flex-wrap gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+                {["Front-End", "HR", "Finance", "Remote", "React", "Sales"].map((chip) => (
+                  <span
+                    key={chip}
+                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-500 shadow-sm dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300"
+                  >
+                    {chip}
+                  </span>
                 ))}
               </div>
+            </div>
 
-              <div className="grid gap-4 rounded-2xl border border-slate-200 p-4 dark:border-slate-800 md:grid-cols-2">
-                <InfoItem label="Current Company" value="Masked Employer" />
-                <InfoItem label="Education" value="Bachelor's Degree" />
-                <InfoItem label="Salary Expectation" value="NPR 55K-75K" />
-                <InfoItem label="Notice Period" value="30 Days" />
+            <div className="relative">
+              <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_25px_50px_-40px_rgba(15,23,42,0.25)] dark:border-slate-800 dark:bg-slate-950">
+                <div className="rounded-[1.35rem] bg-[#f5f7fd] p-4 dark:bg-slate-900">
+                  <div className="flex items-center gap-2 text-slate-400">
+                    <div className="h-2.5 w-2.5 rounded-full bg-slate-300" />
+                    <div className="h-2.5 w-2.5 rounded-full bg-slate-200" />
+                    <div className="h-2.5 w-2.5 rounded-full bg-slate-200" />
+                  </div>
+
+                  <div className="mt-5 rounded-[1.3rem] border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+                    <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900">
+                      <Search className="h-4 w-4 text-slate-400" />
+                      <span className="flex-1 text-sm text-slate-400">Search by skill, title, or notice period</span>
+                      <span className="rounded-xl bg-primary px-3 py-2 text-xs font-semibold text-white">Search</span>
+                    </div>
+
+                    <div className="mt-5 flex items-start justify-between gap-4">
+                      <div>
+                        <span className="inline-flex rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-primary dark:bg-slate-800 dark:text-sky-300">
+                          Candidate #AH-2041
+                        </span>
+                        <h3 className="mt-3 text-2xl font-semibold text-slate-950 dark:text-white">Senior HR Officer</h3>
+                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                          5 years experience · Kathmandu preferred
+                        </p>
+                      </div>
+                      <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300">
+                        Privacy Protected
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {["Recruitment", "Payroll", "Labor Law", "HRIS"].map((skill) => (
+                        <SkillTag key={skill} label={skill} />
+                      ))}
+                    </div>
+
+                    <div className="mt-5 grid gap-3 rounded-[1.15rem] border border-slate-200 bg-[#fbfcff] p-4 dark:border-slate-800 dark:bg-slate-900/70">
+                      <InfoItem label="Location" value="Bagmati or remote" />
+                      <InfoItem label="Salary Range" value="NPR 55K-75K" />
+                      <InfoItem label="Work Mode" value="Remote / Hybrid" />
+                      <InfoItem label="Notice Period" value="30 days" />
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="mt-6 flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 dark:border-slate-800 dark:bg-slate-900">
-                <div>
-                  <p className="text-sm font-medium text-slate-900 dark:text-white">Interested in this profile?</p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Request contact without revealing the candidate&apos;s identity.
-                  </p>
+              <div className="absolute -bottom-6 -left-4 hidden w-56 rounded-[1.4rem] border border-slate-200 bg-white p-4 shadow-[0_22px_45px_-34px_rgba(15,23,42,0.28)] md:block dark:border-slate-800 dark:bg-slate-950">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-indigo-50 text-primary dark:bg-slate-800 dark:text-sky-300">
+                    <ShieldCheck className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">Trusted hiring flow</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">You control when employers can reach you.</p>
+                  </div>
                 </div>
-                <MarketingLinkButton href="/employer/search">HIRE ME</MarketingLinkButton>
+              </div>
+
+              <div className="absolute -right-4 top-10 hidden w-44 rounded-[1.2rem] border border-slate-200 bg-white p-4 shadow-[0_22px_45px_-34px_rgba(15,23,42,0.28)] xl:block dark:border-slate-800 dark:bg-slate-950">
+                <div className="flex items-center gap-2 text-primary dark:text-sky-300">
+                  <Sparkles className="h-4 w-4" />
+                  <span className="text-xs font-semibold uppercase tracking-[0.22em]">Search Ready</span>
+                </div>
+                <p className="mt-3 text-sm font-semibold text-slate-900 dark:text-white">Verified employers only</p>
+                <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                  Employers see your strengths first, not your personal details.
+                </p>
               </div>
             </div>
           </div>

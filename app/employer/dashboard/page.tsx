@@ -52,8 +52,10 @@ export default async function EmployerDashboardPage() {
             <Card>
               <h2 className="text-xl font-semibold">Next best actions</h2>
               <div className="mt-5 grid gap-3">
-                <a href="/employer/search" className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-white">
-                  Search candidates with privacy-safe filters
+                <a href="/employer/search" className="rounded-3xl border border-[#d9d6ff] bg-gradient-to-r from-[#f7f5ff] to-white p-5 text-sm font-medium text-slate-700 shadow-[0_12px_24px_rgba(108,99,255,0.08)] transition hover:-translate-y-0.5 hover:border-[#6C63FF] hover:shadow-[0_18px_34px_rgba(108,99,255,0.16)]">
+                  <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-[#6C63FF]">Recommended</span>
+                  <span className="mt-2 block text-base font-semibold text-slate-900">Open the new candidate search</span>
+                  <span className="mt-1 block text-sm text-slate-500">Use match scoring, richer filters, and shortlist candidates for outreach.</span>
                 </a>
                 <a href="#requests" className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-white">
                   Review recent HIRE ME requests

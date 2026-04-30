@@ -14,10 +14,13 @@ export type SearchFilters = {
   certification?: string;
   language?: string;
   workMode?: WorkMode;
+  workModes?: WorkMode[];
+  experienceLevels?: ("entry" | "mid" | "senior" | "manager" | "director")[];
+  categories?: ("HR" | "Finance" | "IT" | "Sales" | "Marketing" | "Operations" | "Customer Service")[];
   availability?: string;
   lastActiveDays?: number;
   profileCompleteness?: number;
-  sortBy?: "best_match" | "newest" | "highest_experience" | "earliest_availability";
+  sortBy?: "best_match" | "newest" | "highest_experience" | "earliest_availability" | "salary_high_to_low" | "experience_low_to_high";
 };
 
 export type CandidateCardView = {
@@ -33,8 +36,17 @@ export type CandidateCardView = {
   noticePeriod: NoticePeriod;
   matchScore: number;
   profileCompleteness: number;
+  lastActiveDaysAgo: number;
+  experienceLevel: "Entry Level" | "Mid Level" | "Senior Level" | "Manager" | "Director";
+  category: "HR" | "Finance" | "IT" | "Sales" | "Marketing" | "Operations" | "Customer Service";
+  isFeatured: boolean;
+  isNew: boolean;
   skills: string[];
   summary: string | null;
+  matchedSkills: string[];
+  missingSkills: string[];
+  matchExplanation: string;
+  isSaved: boolean;
 };
 
 export type ContactDisclosureMode = "messaging_only" | "reveal_contact";
