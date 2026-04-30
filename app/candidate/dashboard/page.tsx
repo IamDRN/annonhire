@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { NotificationBell } from "@/components/notifications/notification-bell";
 import { EmptyStatePrompt } from "@/components/candidate/empty-state-prompt";
@@ -8,6 +9,7 @@ import { PrivacySettingsPanel } from "@/components/candidate/privacy-settings-pa
 import { EmptyState } from "@/components/ui/empty-state";
 import { ProtectedRoute } from "@/components/ui/protected-route";
 import { Card } from "@/components/ui/card";
+import { buttonVariants } from "@/components/ui/button";
 import { getCurrentSession } from "@/lib/auth/session";
 import { calculateProfileCompleteness } from "@/lib/profile-completeness";
 import { getCandidateDashboard } from "@/services/dashboard-service";
@@ -79,7 +81,12 @@ export default async function CandidateDashboardPage() {
                 </div>
               ) : null}
             </div>
-            <NotificationBell />
+            <div className="flex items-center gap-3">
+              <Link href="/" className={buttonVariants({ variant: "outline", size: "sm" })}>
+                Back to Home
+              </Link>
+              <NotificationBell />
+            </div>
           </div>
           <StatsCards
             items={[

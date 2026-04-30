@@ -1,7 +1,11 @@
+"use client";
+
 import * as React from "react";
 import Link from "next/link";
-import { Bell, BriefcaseBusiness, Building2, Home, Search, Settings, Shield } from "lucide-react";
+import { signOut } from "next-auth/react";
+import { Bell, BriefcaseBusiness, Building2, Home, LogOut, Search, Settings, Shield, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 type SidebarLink = {
   href: string;
@@ -35,25 +39,51 @@ export function DashboardSidebar({ role }: { role: "candidate" | "employer" | "a
   const links = role === "candidate" ? candidateLinks : role === "employer" ? employerLinks : adminLinks;
 
   return (
-    <aside className="glass-panel h-fit p-4">
-      <p className="px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{role} portal</p>
-      <div className="mt-2 space-y-1">
-        {links.map((link) => {
-          const Icon = link.icon;
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-slate-600 transition hover:bg-slate-100 hover:text-slate-950"
-              )}
-            >
-              <Icon className="h-4 w-4" />
-              {link.label}
-            </Link>
-          );
-        })}
+    <aside className="glass-panel flex h-fit flex-col p-4">
+      <div>
+        <p className="px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{role} portal</p>
+        <div className="mt-2 space-y-1">
+          {links.map((link) => {
+            const Icon = link.icon;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-slate-600 transition hover:bg-slate-100 hover:text-slate-950"
+                )}
+              >
+                <Icon className="h-4 w-4" />
+                {link.label}
+              </Link>
+            );
+          })}
+        </div>
       </div>
+
+      {role === "candidate" ? (
+        <div className="mt-6 border-t border-slate-200 pt-4 dark:border-slate-800">
+          <p className="px-3 pb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Public site</p>
+          <div className="space-y-2">
+            <Link
+              href="/"
+              className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-950"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Home
+            </Link>
+            <Button
+              type="button"
+              variant="ghost"
+              className="w-full justify-start rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-950"
+              onClick={() => signOut({ callbackUrl: "/" })}
+            >
+              <LogOut className="mr-3 h-4 w-4" />
+              Logout
+            </Button>
+          </div>
+        </div>
+      ) : null}
     </aside>
   );
 }
